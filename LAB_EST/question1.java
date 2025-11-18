@@ -1,31 +1,22 @@
-package LAB_EST;
-
-public class question1 {
-    public int subarraySum(int[] arr, int k) {
-        int i = -1, j=0, sum=arr[j], count = 0, n = arr.length, target = k;
-        while(i < n && j < n) {
-            if(sum == target) {
-                count++;
-                j++;
-                if(j < n) sum += arr[j];
-            } else if(sum < target) {
-                j++;
-                if(j < n) sum += arr[j];
-            } else {
-                i++;
-                if(i<n && i<=j) sum -= arr[i];
-            }
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        for(int i=1;i<nums.length;i++){
+            nums[i] += nums[i-1]; // prefix arr bn gya 
         }
 
-        while(i < n) {
-            if(sum == target) {
-                count++;
+        Map <Integer,Integer> freq = new HashMap<>();
+        int rem = 0;
+        for(int j=0;j<nums.length;j++){
+            if(nums[j]==k) count ++;
+            rem = nums[j] - k;
+            if(freq.containsKey(rem)) count += freq.get(rem);
+            if(freq.containsKey(nums[j])) {
+                freq.put(nums[j], freq.get(nums[j])+1);
+            }else{
+                freq.put(nums[j],1);
             }
-            i++;
-            if(i<n) sum -= arr[i];
         }
-        if(sum == target) count++;
-
         return count;
     }
 }
